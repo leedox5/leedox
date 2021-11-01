@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        <thead class="text-center table-dark">
+            <tr>
+                <th>NO</th>
+                <th>제목</th>    
+                <th>날자</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                <td>3</td>
+                <td class="text-start">
+                    <a href="#">2021년10월31일 정모</a>
+                </td>
+                <td>2021.11.01 10:42</td>
+            </tr>
+            
+            <tr class="text-center">
+                <td>2</td>
+                <td class="text-start">
+                    <a href="#">2021년10월31일 정모</a>
+                    <span class="text-danger small ml-2">1</span>
+                </td>
+                <td>2021.11.01 10:08</td>
+            </tr>
+            
+            <tr class="text-center">
+                <td>1</td>
+                <td class="text-start">
+                    <a href="#">2021년10월31일 정모</a>
+                    <span class="text-danger small ml-2">1</span>
+                </td>
+                <td>2021.10.29 14:12</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="#" class="btn btn-primary">게임 등록하기</a>
+</div>
+{% endblock %}
