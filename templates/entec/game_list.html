@@ -6,37 +6,26 @@
             <tr>
                 <th>NO</th>
                 <th>제목</th>    
-                <th>날자</th>
             </tr>
         </thead>
         <tbody>
             <tr class="text-center">
-                <td>3</td>
-                <td class="text-start">
-                    <a href="#">2021년11월13일 정모</a>
-                </td>
-                <td>2021.11.01 10:42</td>
-            </tr>
-            
-            <tr class="text-center">
                 <td>2</td>
-                <td class="text-start">
-                    <a href="#">2021년11월06일 정모</a>
+                <td>
+                    <a href="#">정모[2021.10.31] B</a>
                     <span class="text-danger small ml-2">1</span>
                 </td>
-                <td>2021.11.01 10:08</td>
             </tr>
             
             <tr class="text-center">
                 <td>1</td>
-                <td class="text-start">
-                    <a href="#">2021년10월31일 정모</a>
+                <td>
+                    <a href="{% url 'entec:detail' %}">정모[2021.10.31] A</a>
                     <span class="text-danger small ml-2">1</span>
                 </td>
-                <td>2021.10.29 14:12</td>
             </tr>
         </tbody>
     </table>
-    <a href="#" class="btn btn-primary">게임 등록하기</a>
+    <a href="{% url 'entec:game_create' %}" class="btn btn-primary">매치 추가</a>
 </div>
 {% endblock %}
