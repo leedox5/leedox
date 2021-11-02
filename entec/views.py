@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
+from entec.forms import GameForm
 
 from entec.models import Game
 
@@ -18,7 +19,17 @@ def detail(request, game_id):
     return render(request, "entec/game_detail.html", context)
 
 def game_create(request):
-    return render(request, "entec/game_form.html")
+    if request.method == "POST":
+        form = GameForm(request.POST)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.create_date = timezone.now()
+            game.save()
+            return redirect("entec:index")
+    else:
+        form = GameForm()
+    context = {'form': form}
+    return render(request, "entec/game_form.html", context)
 
 def player_create(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
