@@ -9,21 +9,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="text-center">
-                <td>2</td>
-                <td>
-                    <a href="#">정모[2021.10.31] B</a>
-                    <span class="text-danger small ml-2">1</span>
-                </td>
-            </tr>
-            
+            {% if game_list %}
+            {% for game in game_list %}
             <tr class="text-center">
                 <td>1</td>
                 <td>
-                    <a href="{% url 'entec:detail' %}">정모[2021.10.31] A</a>
+                    <a href="{% url 'entec:detail' game.id %}">{{ game.subject }}</a>
                     <span class="text-danger small ml-2">1</span>
                 </td>
             </tr>
+            {% endfor %}
+            {% endif %}
         </tbody>
     </table>
     <a href="{% url 'entec:game_create' %}" class="btn btn-primary">매치 추가</a>

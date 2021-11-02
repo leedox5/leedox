@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'leedox.apps.LeedoxConfig',
+    'entec.apps.EntecConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

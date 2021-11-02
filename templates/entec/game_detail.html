@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
-    <h2 class="border-bottom py-2">[2021.11.31]정모 A</h2>
+    <h2 class="border-bottom py-2">{{ game.subject }}</h2>
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
@@ -14,20 +14,23 @@
             </tr>
         </thead>
         <tbody>
+            {%  for player in game.player_set.all %}
             <tr class="text-center">
-                <td>1</td>
-                <td>홍길동</td>
-                <td>6 : 3</td>
-                <td>2 : 6</td>
-                <td>6 : 1</td>
+                <td>{{ player.id }}</td>
+                <td>{{ player.name }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
-    <form method="post">
+    <form action="{% url 'entec:player_create' game.id %}" method="post">
+        {% csrf_token %}
         <div class="input-group input-group-sm mb-3">
             <span class="input-group-text">Name</span>
-            <input type="text" class="form-control" name="player" id="player" value="이순신">
+            <input type="text" class="form-control" name="name" id="name" value="">
             <button type="submit" class="btn btn-outline-secondary">Add</button>
         </div>
     </form>
