@@ -68,24 +68,50 @@ def player_delete(request, player_id):
 
 def match_create(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
-    player1 = game.player_set.all()[0]
-    player2 = game.player_set.all()[1]
-    player3 = game.player_set.all()[2]
-    player4 = game.player_set.all()[3]
 
-    desc  = player1.name + "," + player2.name + ":" + player3.name + "," + player4.name
-    match = Match(game=game, seq=1, player1=player1, player2=player2, player3=player3, player4=player4, desc=desc, create_date=timezone.now())
-    match.save()
+    player_count = game.player_set.all().count()
+    if player_count == 4:
+        player1 = game.player_set.all()[0]
+        player2 = game.player_set.all()[1]
+        player3 = game.player_set.all()[2]
+        player4 = game.player_set.all()[3]
 
-    desc  = player1.name + "," + player3.name + ":" + player2.name + "," + player4.name
-    match = Match(game=game, seq=2, player1=player1, player2=player3, player3=player2, player4=player4, desc=desc, create_date=timezone.now())
-    match.save()
+        desc  = player1.name + "," + player2.name + ":" + player3.name + "," + player4.name
+        match = Match(game=game, seq=1, player1=player1, player2=player2, player3=player3, player4=player4, desc=desc, create_date=timezone.now())
+        match.save()
 
-    desc  = player1.name + "," + player4.name + ":" + player2.name + "," + player3.name
-    match = Match(game=game, seq=3, player1=player1, player2=player4, player3=player2, player4=player3, desc=desc, create_date=timezone.now())
-    match.save()
+        desc  = player1.name + "," + player3.name + ":" + player2.name + "," + player4.name
+        match = Match(game=game, seq=2, player1=player1, player2=player3, player3=player2, player4=player4, desc=desc, create_date=timezone.now())
+        match.save()
+
+        desc  = player1.name + "," + player4.name + ":" + player2.name + "," + player3.name
+        match = Match(game=game, seq=3, player1=player1, player2=player4, player3=player2, player4=player3, desc=desc, create_date=timezone.now())
+        match.save()
+
+    if player_count == 5:
+        player1 = game.player_set.all()[0]
+        player2 = game.player_set.all()[1]
+        player3 = game.player_set.all()[2]
+        player4 = game.player_set.all()[3]
+        player5 = game.player_set.all()[4]
+
+        # 1 2 : 3 4
+        # 1 3 : 2 5
+        # 1 4 : 3 5
+        # 1 5 : 2 4
+        # 2 3 : 4 5
+        match_create_one(game, 1, player1, player2, player3, player4)
+        match_create_one(game, 2, player1, player3, player2, player5)
+        match_create_one(game, 3, player1, player4, player3, player5)
+        match_create_one(game, 4, player1, player5, player2, player4)
+        match_create_one(game, 5, player2, player3, player4, player5)
 
     return redirect("entec:detail", game_id=game.id)
+
+def match_create_one(g, seq, p1, p2, p3, p4):
+    desc = str(p1.seq) + p1.name + "," + str(p2.seq) + p2.name + ":" + str(p3.seq) + p3.name + "," + str(p4.seq) + p4.name
+    match = Match(game = g, seq = seq, player1 = p1, player2 = p2, player3 = p3, player4 = p4, desc = desc, create_date = timezone.now())
+    match.save()
 
 def match_delete(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
@@ -97,6 +123,8 @@ def match_delete(request, game_id):
         player.score_12 = 0
         player.score_03 = 0
         player.score_13 = 0
+        player.score_04 = 0
+        player.score_14 = 0
         player.win_ma = 0
         player.los_ma = 0
         player.win_ga = 0
@@ -117,52 +145,27 @@ def match_save(request, match_id):
     score1 = request.POST.get("no1")
     score2 = request.POST.get("no2")
 
-    if match.seq == 1:
-        save_player_score_1(match.player1, int(score1), int(score2))
-        save_player_score_1(match.player2, int(score1), int(score2))
-        save_player_score_1(match.player3, int(score2), int(score1))
-        save_player_score_1(match.player4, int(score2), int(score1))
+    save_player_score_4(match.player1, int(score1), int(score2))
+    save_player_score_4(match.player2, int(score1), int(score2))
+    save_player_score_4(match.player3, int(score2), int(score1))
+    save_player_score_4(match.player4, int(score2), int(score1))
 
-    if match.seq == 2:
-        save_player_score_2(match.player1, int(score1), int(score2))
-        save_player_score_2(match.player2, int(score1), int(score2))
-        save_player_score_2(match.player3, int(score2), int(score1))
-        save_player_score_2(match.player4, int(score2), int(score1))
+    players = Player.objects.filter(game_id=match.game_id)
+    players_sorted = sorted(players, key=lambda p : (p.win_ma, p.win_ga), reverse=True)
 
-    if match.seq == 3:
-        save_player_score_3(match.player1, int(score1), int(score2))
-        save_player_score_3(match.player2, int(score1), int(score2))
-        save_player_score_3(match.player3, int(score2), int(score1))
-        save_player_score_3(match.player4, int(score2), int(score1))
+    scores = []
+    for row in players_sorted:
+        scores.append(row.sum_ga)
+    
+    ranks = []
+    for score in scores:
+        ranks.append(scores.index(score) + 1)
 
-        players = []
-        players.append(match.player1)
-        players.append(match.player2)
-        players.append(match.player3)
-        players.append(match.player4)
-
-        players_sorted = sorted(players, key=lambda p : (p.win_ma, p.win_ga), reverse=True)
-
-        scores = []
-        for row in players_sorted:
-            scores.append(row.sum_ga)
-        
-        ranks = []
-        for score in scores:
-            ranks.append(scores.index(score) + 1)
-
-        players_sorted[0].game_rank = ranks[0];
-        players_sorted[0].save()
-
-        players_sorted[1].game_rank = ranks[1];
-        players_sorted[1].save()
-
-        players_sorted[2].game_rank = ranks[2];
-        players_sorted[2].save()
-
-        players_sorted[3].game_rank = ranks[3];
-        players_sorted[3].save()
-
+    cnt = 0
+    for player in players_sorted:
+        player.game_rank = ranks[cnt];
+        player.save()
+        cnt = cnt + 1
 
     return redirect("entec:detail", game_id=match.game.id)
 
@@ -170,11 +173,14 @@ def get_win_ma(player):
     win_ma = 0
     if player.score_01 > player.score_11:
         win_ma  = 1
-    if player.score_02 is not None:        
+    if player.score_02 is not None and player.score_02 > 0:        
         if player.score_02 > player.score_12:
             win_ma += 1
-    if player.score_03 is not None:            
+    if player.score_03 is not None and player.score_03 > 0:            
         if player.score_03 > player.score_13:
+            win_ma += 1
+    if player.score_04 is not None and player.score_04 > 0:            
+        if player.score_04 > player.score_14:
             win_ma += 1
     return win_ma
 
@@ -182,11 +188,14 @@ def get_los_ma(player):
     los_ma = 0
     if player.score_01 < player.score_11:
         los_ma  = 1
-    if player.score_02 is not None:
+    if player.score_02 is not None and player.score_02 > 0:
         if player.score_02 < player.score_12:
             los_ma += 1
-    if player.score_03 is not None:            
+    if player.score_03 is not None and player.score_03 > 0:            
         if player.score_03 < player.score_13:
+            los_ma += 1
+    if player.score_04 is not None and player.score_04 > 0:            
+        if player.score_04 < player.score_14:
             los_ma += 1
     return los_ma
 
@@ -225,6 +234,33 @@ def save_player_score_3(player, score1, score2):
     player.los_ma = get_los_ma(player)
 
     player.save() 
+
+def save_player_score_4(player, score1, score2):
+    if player.score_01 is None or player.score_01 == 0:
+        player.score_01 = score1
+        player.score_11 = score2
+        player.win_ga = player.score_01
+        player.los_ga = player.score_11
+    elif player.score_02 is None or player.score_02 == 0:
+        player.score_02 = score1
+        player.score_12 = score2
+        player.win_ga = player.score_01 + player.score_02
+        player.los_ga = player.score_11 + player.score_12
+    elif player.score_03 is None or player.score_03 == 0:
+        player.score_03 = score1
+        player.score_13 = score2
+        player.win_ga = player.score_01 + player.score_02 + player.score_03
+        player.los_ga = player.score_11 + player.score_12 + player.score_13
+    elif player.score_04 is None or player.score_04 == 0:
+        player.score_04 = score1
+        player.score_14 = score2
+        player.win_ga = player.score_01 + player.score_02 + player.score_03 + player.score_04
+        player.los_ga = player.score_11 + player.score_12 + player.score_13 + player.score_14
+
+    player.sum_ga = player.win_ga - player.los_ga
+    player.win_ma = get_win_ma(player)
+    player.los_ma = get_los_ma(player)
+    player.save()
 
 def t(request):
     context = {
