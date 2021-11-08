@@ -179,13 +179,13 @@ def get_win_ma(player):
     win_ma = 0
     if player.score_01 > player.score_11:
         win_ma  = 1
-    if player.score_02 is not None and player.score_02 > 0:        
+    if player.score_02 is not None and player.score_02 >= 0:        
         if player.score_02 > player.score_12:
             win_ma += 1
-    if player.score_03 is not None and player.score_03 > 0:            
+    if player.score_03 is not None and player.score_03 >= 0:            
         if player.score_03 > player.score_13:
             win_ma += 1
-    if player.score_04 is not None and player.score_04 > 0:            
+    if player.score_04 is not None and player.score_04 >= 0:            
         if player.score_04 > player.score_14:
             win_ma += 1
     return win_ma
@@ -194,13 +194,13 @@ def get_los_ma(player):
     los_ma = 0
     if player.score_01 < player.score_11:
         los_ma  = 1
-    if player.score_02 is not None and player.score_02 > 0:
+    if player.score_02 is not None and player.score_02 >= 0:
         if player.score_02 < player.score_12:
             los_ma += 1
-    if player.score_03 is not None and player.score_03 > 0:            
+    if player.score_03 is not None and player.score_03 >= 0:            
         if player.score_03 < player.score_13:
             los_ma += 1
-    if player.score_04 is not None and player.score_04 > 0:            
+    if player.score_04 is not None and player.score_04 >= 0:            
         if player.score_04 < player.score_14:
             los_ma += 1
     return los_ma
