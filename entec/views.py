@@ -117,14 +117,14 @@ def match_delete(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
     for player in game.player_set.all():
-        player.score_01 = 0
-        player.score_11 = 0
-        player.score_02 = 0
-        player.score_12 = 0
-        player.score_03 = 0
-        player.score_13 = 0
-        player.score_04 = 0
-        player.score_14 = 0
+        player.score_01 = None
+        player.score_11 = None
+        player.score_02 = None
+        player.score_12 = None
+        player.score_03 = None
+        player.score_13 = None
+        player.score_04 = None
+        player.score_14 = None
         player.win_ma = 0
         player.los_ma = 0
         player.win_ga = 0
@@ -242,22 +242,22 @@ def save_player_score_3(player, score1, score2):
     player.save() 
 
 def save_player_score_4(player, score1, score2):
-    if player.score_01 is None or player.score_01 == 0:
+    if player.score_01 is None:
         player.score_01 = score1
         player.score_11 = score2
         player.win_ga = player.score_01
         player.los_ga = player.score_11
-    elif player.score_02 is None or player.score_02 == 0:
+    elif player.score_02 is None:
         player.score_02 = score1
         player.score_12 = score2
         player.win_ga = player.score_01 + player.score_02
         player.los_ga = player.score_11 + player.score_12
-    elif player.score_03 is None or player.score_03 == 0:
+    elif player.score_03 is None:
         player.score_03 = score1
         player.score_13 = score2
         player.win_ga = player.score_01 + player.score_02 + player.score_03
         player.los_ga = player.score_11 + player.score_12 + player.score_13
-    elif player.score_04 is None or player.score_04 == 0:
+    elif player.score_04 is None:
         player.score_04 = score1
         player.score_14 = score2
         player.win_ga = player.score_01 + player.score_02 + player.score_03 + player.score_04
