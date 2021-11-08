@@ -76,17 +76,9 @@ def match_create(request, game_id):
         player3 = game.player_set.all()[2]
         player4 = game.player_set.all()[3]
 
-        desc  = player1.name + "," + player2.name + ":" + player3.name + "," + player4.name
-        match = Match(game=game, seq=1, player1=player1, player2=player2, player3=player3, player4=player4, desc=desc, create_date=timezone.now())
-        match.save()
-
-        desc  = player1.name + "," + player3.name + ":" + player2.name + "," + player4.name
-        match = Match(game=game, seq=2, player1=player1, player2=player3, player3=player2, player4=player4, desc=desc, create_date=timezone.now())
-        match.save()
-
-        desc  = player1.name + "," + player4.name + ":" + player2.name + "," + player3.name
-        match = Match(game=game, seq=3, player1=player1, player2=player4, player3=player2, player4=player3, desc=desc, create_date=timezone.now())
-        match.save()
+        match_create_one(game, 1, player1, player2, player3, player4)
+        match_create_one(game, 2, player1, player3, player2, player4)
+        match_create_one(game, 3, player1, player4, player2, player3)
 
     if player_count == 5:
         player1 = game.player_set.all()[0]
