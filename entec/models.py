@@ -24,6 +24,7 @@ class Player(models.Model):
     sum_ga = models.IntegerField(null=True)
     game_rank = models.IntegerField(null=True)
     create_date = models.DateTimeField()
+    seq = models.IntegerField(null=True)
 
 class Match(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

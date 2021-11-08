@@ -2,6 +2,12 @@
 {% block content %}
 <div class="container my-3">
     <h2 class="border-bottom py-2">{{ game.subject }}</h2>
+    <div class="btn-toolbar justify-content-end mb-2">
+        <div class="btn-group btn-group-sm">
+            <a href="{% url 'entec:game_modify' game.id %}" class="btn btn-outline-secondary">수정</a>
+            <a href="#" class="delete btn btn-outline-secondary" data-uri="{% url 'entec:game_delete' game.id %}">삭제</a>
+        </div>
+    </div>
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
@@ -11,17 +17,19 @@
                 <td>G2</td>
                 <td>G3</td>
                 <td>G4</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
             {%  for player in game.player_set.all %}
             <tr class="text-center">
-                <td>{{ player.id }}</td>
+                <td>{{ player.seq }}</td>
                 <td>{{ player.name }}</td>
                 <td>{{ player.score_01|default_if_none:"" }}:{{ player.score_11|default_if_none:"" }}</td>
                 <td>{{ player.score_02|default_if_none:"" }}:{{ player.score_12|default_if_none:"" }}</td>
                 <td>{{ player.score_03|default_if_none:"" }}:{{ player.score_13|default_if_none:"" }}</td>
                 <td></td>
+                <td><a href="{% url 'entec:player_delete' player.id %}">삭제</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -37,6 +45,7 @@
     <div class="btn-toolbar justify-content-end">
         <div class="btn-group btn-group-sm">
             <a href="{% url 'entec:match_create' game.id %}" class="btn btn-outline-secondary">대진표 생성</a>
+            <a href="{% url 'entec:match_delete' game.id %}" class="btn btn-outline-secondary">대진표 삭제</a>
         </div>
     </div>
     <!-- 대진표 -->
@@ -110,4 +119,15 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".delete").on("click", function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data("uri");
+        }
+    });
+});
+</script>
 {% endblock %}

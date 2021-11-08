@@ -15,7 +15,7 @@
                 <td>{{game.id}}</td>
                 <td>
                     <a href="{% url 'entec:detail' game.id %}">{{ game.subject }}</a>
-                    <span class="text-danger small ml-2">1</span>
+                    <span class="text-danger small ml-2">{{ game.player_set.count }}</span>
                 </td>
             </tr>
             {% endfor %}

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from entec.forms import GameForm
 
-from entec.models import Game, Match
+from entec.models import Game, Match, Player
 
 # Create your views here.
 def index(request):
@@ -37,10 +37,34 @@ def game_create(request):
     context = {'form': form}
     return render(request, "entec/game_form.html", context)
 
+def game_modify(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+    if request.method == "POST":
+        form = GameForm(request.POST, instance=game)
+        if form.is_valid():
+            game =  form.save(commit=False)
+            game.save()
+            return redirect("entec:detail", game_id=game.id)
+    else:
+        form = GameForm(instance=game)
+    context = { 'form' : form }
+    return render(request, "entec/game_form.html", context)
+
+def game_delete(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+    game.delete()
+    return redirect("entec:index")     
+
 def player_create(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
-    game.player_set.create(name=request.POST.get('name'), create_date=timezone.now())
+    cnt = game.player_set.all().count()
+    game.player_set.create(name=request.POST.get('name'), create_date=timezone.now(), seq=cnt + 1)
     return redirect("entec:detail", game_id=game.id)
+
+def player_delete(request, player_id):
+    player = get_object_or_404(Player, pk=player_id)
+    player.delete()
+    return redirect("entec:detail", game_id=player.game_id)
 
 def match_create(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
@@ -61,6 +85,28 @@ def match_create(request, game_id):
     match = Match(game=game, seq=3, player1=player1, player2=player4, player3=player2, player4=player3, desc=desc, create_date=timezone.now())
     match.save()
 
+    return redirect("entec:detail", game_id=game.id)
+
+def match_delete(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+
+    for player in game.player_set.all():
+        player.score_01 = 0
+        player.score_11 = 0
+        player.score_02 = 0
+        player.score_12 = 0
+        player.score_03 = 0
+        player.score_13 = 0
+        player.win_ma = 0
+        player.los_ma = 0
+        player.win_ga = 0
+        player.los_ga = 0
+        player.sum_ga = 0
+        player.game_rank = 0
+        player.save()
+
+    for match in game.match_set.all():
+        match.delete()
     return redirect("entec:detail", game_id=game.id)
 
 def match_save(request, match_id):
