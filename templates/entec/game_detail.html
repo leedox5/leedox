@@ -29,7 +29,7 @@
                 <td>{{ player.score_02|default_if_none:"" }}:{{ player.score_12|default_if_none:"" }}</td>
                 <td>{{ player.score_03|default_if_none:"" }}:{{ player.score_13|default_if_none:"" }}</td>
                 <td>{{ player.score_04|default_if_none:"" }}:{{ player.score_14|default_if_none:"" }}</td>
-                <td><a href="#" class="delete btn btn-outline-secondary" data-uri="{% url 'entec:player_delete' player.id %}">삭제</a></td>
+                <td><a href="#" class="delete btn btn-sm btn-outline-secondary" data-uri="{% url 'entec:player_delete' player.id %}">삭제</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -79,11 +79,27 @@
                     <div id="collap{{match.id}}" class="collapse">
                         <form action="{% url 'entec:match_save' match.id %}" method="post">
                             {% csrf_token %}
-                            <div class="input-group input-group-sm mb-2">
+                            <div class="input-group input-group-sm justify-content-end">
                                 <span class="input-group-text">Score</span>
-                                <input type="number" class="form-control" name="no1" id="no1" value="6">
+                                <select class="form-select" name="no1" id="no1">
+                                    <option value="6" selected>6</option>
+                                    <option value="5">5</option>
+                                    <option value="4">4</option>
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="1">1</option>
+                                    <option value="0">0</option>
+                                </select>
                                 <span class="input-group-text">:</span>
-                                <input type="number" class="form-control" name="no2" id="no2" value="6">
+                                <select class="form-select" name="no2" id="no2">
+                                    <option value="6" selected>6</option>
+                                    <option value="5">5</option>
+                                    <option value="4">4</option>
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="1">1</option>
+                                    <option value="0">0</option>
+                                </select>
                                 <button type="submit" class="btn btn-outline-secondary">결과입력</button>
                             </div>
                         </form>
