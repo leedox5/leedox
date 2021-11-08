@@ -151,7 +151,13 @@ def match_save(request, match_id):
     save_player_score_4(match.player4, int(score2), int(score1))
 
     players = Player.objects.filter(game_id=match.game_id)
-    players_sorted = sorted(players, key=lambda p : (p.win_ma, p.win_ga), reverse=True)
+    players_f = []
+
+    for player in players:
+        if player.sum_ga is not None:
+            players_f.append(player)
+
+    players_sorted = sorted(players_f, key=lambda p : (p.win_ma, p.sum_ga), reverse=True)
 
     scores = []
     for row in players_sorted:
