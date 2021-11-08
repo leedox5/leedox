@@ -29,7 +29,7 @@
                 <td>{{ player.score_02|default_if_none:"" }}:{{ player.score_12|default_if_none:"" }}</td>
                 <td>{{ player.score_03|default_if_none:"" }}:{{ player.score_13|default_if_none:"" }}</td>
                 <td>{{ player.score_04|default_if_none:"" }}:{{ player.score_14|default_if_none:"" }}</td>
-                <td><a href="{% url 'entec:player_delete' player.id %}">삭제</a></td>
+                <td><a href="#" class="delete btn btn-outline-secondary" data-uri="{% url 'entec:player_delete' player.id %}">삭제</a></td>
             </tr>
             {% endfor %}
         </tbody>
