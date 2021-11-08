@@ -4,7 +4,6 @@
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
-                <th>NO</th>
                 <th>제목</th>    
             </tr>
         </thead>
@@ -12,8 +11,7 @@
             {% if game_list %}
             {% for game in game_list %}
             <tr class="text-center">
-                <td>{{game.id}}</td>
-                <td>
+                <td class="text-start">
                     <a href="{% url 'entec:detail' game.id %}">{{ game.subject }}</a>
                     <span class="text-danger small ml-2">{{ game.player_set.count }}</span>
                 </td>
