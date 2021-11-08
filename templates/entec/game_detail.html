@@ -18,9 +18,9 @@
             <tr class="text-center">
                 <td>{{ player.id }}</td>
                 <td>{{ player.name }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ player.score_01|default_if_none:"" }}:{{ player.score_11|default_if_none:"" }}</td>
+                <td>{{ player.score_02|default_if_none:"" }}:{{ player.score_12|default_if_none:"" }}</td>
+                <td>{{ player.score_03|default_if_none:"" }}:{{ player.score_13|default_if_none:"" }}</td>
                 <td></td>
             </tr>
             {% endfor %}
@@ -34,6 +34,11 @@
             <button type="submit" class="btn btn-outline-secondary">Add</button>
         </div>
     </form>
+    <div class="btn-toolbar justify-content-end">
+        <div class="btn-group btn-group-sm">
+            <a href="{% url 'entec:match_create' game.id %}" class="btn btn-outline-secondary">대진표 생성</a>
+        </div>
+    </div>
     <!-- 대진표 -->
     <h5 class="border-bottom py-2">대진표</h5>
     <table class="table">
@@ -45,22 +50,37 @@
             </tr>
         </thead>
         <tbody>
+            {% for match in game.match_set.all %}
             <tr class="text-center">
-                <td>1</td>
-                <td>홍길동,강감찬:이순신,유관순</td>
-                <td> 6  :  3 </td>
+                <td>{{ match.id }}</td>
+                <td>{{ match.desc }}</td>
+                <td>
+                    {% if match.score %}
+                        {{ match.score }}
+                    {% else %}
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collap{{match.id}}">입력</button>
+                    {% endif %}
+                </td>
             </tr>
+            <tr>
+                <td colspan="3">
+                    <div id="collap{{match.id}}" class="collapse">
+                        <form action="{% url 'entec:match_save' match.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text">Score</span>
+                                <input type="number" class="form-control" name="no1" id="no1" value="6">
+                                <span class="input-group-text">:</span>
+                                <input type="number" class="form-control" name="no2" id="no2" value="6">
+                                <button type="submit" class="btn btn-outline-secondary">결과입력</button>
+                            </div>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
-    <form>
-        <div class="input-group input-group-sm mb-2">
-            <span class="input-group-text">Score</span>
-            <input type="number" class="form-control" value="6">
-            <span class="input-group-text">:</span>
-            <input type="number" class="form-control" value="6">
-            <button type="submit" class="btn btn-outline-secondary">결과입력</button>
-        </div>
-    </form>
     <!-- 집계-->
     <h5 class="border-bottom py-2">집계</h5>
     <table class="table">
@@ -76,15 +96,17 @@
             </tr>
         </thead>
         <tbody>
+            {%  for player in game.player_set.all %}
             <tr class="text-center">
-                <td>1.홍길동</td>
-                <td>1</td>
-                <td>3</td>
-                <td>13</td>
-                <td>17</td>
-                <td>-4</td>
-                <td>4</td>
+                <td>{{ player.name }}</td>
+                <td>{{ player.win_ma|default_if_none:"" }}</td>
+                <td>{{ player.los_ma|default_if_none:"" }}</td>
+                <td>{{ player.win_ga|default_if_none:"" }}</td>
+                <td>{{ player.los_ga|default_if_none:"" }}</td>
+                <td>{{ player.sum_ga|default_if_none:"" }}</td>
+                <td>{{ player.game_rank|default_if_none:"" }}</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
