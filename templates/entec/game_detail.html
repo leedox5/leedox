@@ -61,7 +61,7 @@
         <tbody>
             {% for match in game.match_set.all %}
             <tr class="text-center">
-                <td>{{ match.id }}</td>
+                <td>{{ match.seq }}</td>
                 <td>{{ match.desc }}</td>
                 <td>
                     {% if match.score %}
