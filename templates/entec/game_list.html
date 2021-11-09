@@ -4,7 +4,8 @@
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
-                <th>제목</th>    
+                <th>제목</th> 
+                <th>만든이</th>   
             </tr>
         </thead>
         <tbody>
@@ -15,6 +16,7 @@
                     <a href="{% url 'entec:detail' game.id %}">{{ game.subject }}</a>
                     <span class="text-danger small ml-2">{{ game.player_set.count }}</span>
                 </td>
+                <td>{{ game.creator.username }}</td>
             </tr>
             {% endfor %}
             {% endif %}

@@ -2,12 +2,14 @@
 {% block content %}
 <div class="container my-3">
     <h2 class="border-bottom py-2">{{ game.subject }}</h2>
+    {% if request.user == game.creator %}
     <div class="btn-toolbar justify-content-end mb-2">
         <div class="btn-group btn-group-sm">
             <a href="{% url 'entec:game_modify' game.id %}" class="btn btn-outline-secondary">수정</a>
             <a href="#" class="delete btn btn-outline-secondary" data-uri="{% url 'entec:game_delete' game.id %}">삭제</a>
         </div>
     </div>
+    {% endif %}
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
@@ -29,7 +31,11 @@
                 <td>{{ player.score_02|default_if_none:"" }}:{{ player.score_12|default_if_none:"" }}</td>
                 <td>{{ player.score_03|default_if_none:"" }}:{{ player.score_13|default_if_none:"" }}</td>
                 <td>{{ player.score_04|default_if_none:"" }}:{{ player.score_14|default_if_none:"" }}</td>
-                <td><a href="#" class="delete btn btn-sm btn-outline-secondary" data-uri="{% url 'entec:player_delete' player.id %}">삭제</a></td>
+                <td>
+                    {% if request.user == game.creator %}
+                    <a href="#" class="delete btn btn-sm btn-outline-secondary" data-uri="{% url 'entec:player_delete' player.id %}">삭제</a>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -38,16 +44,18 @@
         {% csrf_token %}
         <div class="input-group input-group-sm mb-3">
             <span class="input-group-text">Name</span>
-            <input type="text" class="form-control" name="name" id="name" value="">
-            <button type="submit" class="btn btn-outline-secondary">Add</button>
+            <input {% if request.user != game.creator %}disabled{% endif %} type="text" class="form-control" name="name" id="name" value="">
+            <button {% if request.user != game.creator %}disabled{% endif %} type="submit" class="btn btn-outline-secondary">Add</button>
         </div>
     </form>
     <div class="btn-toolbar justify-content-end">
         <div class="btn-group btn-group-sm">
-            {% if game.match_set.count == 0 %}
-            <a href="{% url 'entec:match_create' game.id %}" class="btn btn-outline-secondary">대진표 생성</a>
-            {% else %}
-            <a href="#" data-uri="{% url 'entec:match_delete' game.id %}" class="delete btn btn-outline-secondary">대진표 삭제</a>
+            {% if request.user == game.creator %}
+                {% if game.match_set.count == 0 %}
+                <a href="{% url 'entec:match_create' game.id %}" class="btn btn-outline-secondary">대진표 생성</a>
+                {% else %}
+                <a href="#" data-uri="{% url 'entec:match_delete' game.id %}" class="delete btn btn-outline-secondary">대진표 삭제</a>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -68,7 +76,9 @@
                     {% if match.score %}
                         {{ match.score }}
                     {% else %}
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collap{{match.id}}">입력</button>
+                        {% if request.user == game.creator %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collap{{match.id}}">입력</button>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>

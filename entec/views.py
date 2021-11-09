@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from entec.forms import GameForm
+from django.contrib.auth.decorators import login_required
 
 from entec.models import Game, Match, Player
 
@@ -24,11 +25,13 @@ def detail(request, game_id):
     context = {'game': game }
     return render(request, "entec/game_detail.html", context)
 
+@login_required(login_url='common:login')
 def game_create(request):
     if request.method == "POST":
         form = GameForm(request.POST)
         if form.is_valid():
             game = form.save(commit=False)
+            game.creator = request.user
             game.create_date = timezone.now()
             game.save()
             return redirect("entec:index")

@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from entec import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("leedox/", include("leedox.urls")),
     path("entec/", include("entec.urls")),
+    path("common/", include("common.urls")),
+    path('', views.index, name='index'),
 ]
