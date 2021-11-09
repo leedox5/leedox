@@ -98,6 +98,38 @@ def match_create(request, game_id):
         match_create_one(game, 4, player1, player5, player2, player4)
         match_create_one(game, 5, player2, player3, player4, player5)
 
+    if player_count == 6:
+        p1 = game.player_set.all()[0]
+        p2 = game.player_set.all()[1]
+        p3 = game.player_set.all()[2]
+        p4 = game.player_set.all()[3]
+        p5 = game.player_set.all()[4]
+        p6 = game.player_set.all()[5]
+
+        match_create_one(game, 1, p1, p2, p3, p4)
+        match_create_one(game, 2, p1, p5, p4, p6)
+        match_create_one(game, 3, p2, p3, p5, p6)
+        match_create_one(game, 4, p1, p4, p2, p5)
+        match_create_one(game, 5, p2, p4, p3, p6)
+        match_create_one(game, 6, p1, p6, p3, p5)
+
+    if player_count == 7:
+        p1 = game.player_set.all()[0]
+        p2 = game.player_set.all()[1]
+        p3 = game.player_set.all()[2]
+        p4 = game.player_set.all()[3]
+        p5 = game.player_set.all()[4]
+        p6 = game.player_set.all()[5]
+        p7 = game.player_set.all()[6]
+
+        match_create_one(game, 1, p1, p2, p3, p4)
+        match_create_one(game, 2, p5, p6, p1, p7)
+        match_create_one(game, 3, p3, p5, p2, p4)
+        match_create_one(game, 4, p1, p4, p6, p7)
+        match_create_one(game, 5, p2, p3, p5, p7)
+        match_create_one(game, 6, p1, p6, p2, p5)
+        match_create_one(game, 7, p4, p6, p3, p7)
+
     return redirect("entec:detail", game_id=game.id)
 
 def match_create_one(g, seq, p1, p2, p3, p4):

@@ -56,7 +56,6 @@
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
-                <td>NO</td>
                 <td>Team A : Team B</td>
                 <td>결과</td>
             </tr>
@@ -64,8 +63,7 @@
         <tbody>
             {% for match in game.match_set.all %}
             <tr class="text-center">
-                <td>{{ match.seq }}</td>
-                <td>{{ match.desc }}</td>
+                <td>[{{ match.seq }}]{{ match.desc }}</td>
                 <td>
                     {% if match.score %}
                         {{ match.score }}
