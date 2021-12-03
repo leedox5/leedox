@@ -28,3 +28,5 @@ FOR /R C:\java\apache-maven-3.6.3\repository\com\google\code\gson %%A IN (*.jar)
       <artifactId>gson</artifactId>
       <version>${gson.version}</version>
     </dependency>
+
+# jar가 새로올라가면 restart 필요함
