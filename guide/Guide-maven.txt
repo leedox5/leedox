@@ -1,0 +1,172 @@
+# 설치
+http://maven.apache.org 
+
+# 프로젝트 생성
+>mvn archetype:generate
+...
+...
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1760:  <Enter>
+Choose org.apache.maven.archetypes:maven-archetype-quickstart version:
+1: 1.0-alpha-1
+2: 1.0-alpha-2
+3: 1.0-alpha-3
+4: 1.0-alpha-4
+5: 1.0
+6: 1.1
+7: 1.3
+8: 1.4
+Choose a number: 8:  <Enter>
+Define value for property 'groupId': itnova
+Define value for property 'artifactId': sample
+Define value for property 'version' 1.0-SNAPSHOT: :
+Define value for property 'package' itnova: :
+Confirm properties configuration:
+groupId: itnova
+artifactId: sample
+version: 1.0-SNAPSHOT
+package: itnova
+ Y: :<Enter>
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: maven-archetype-quickstart:1.4
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: itnova
+[INFO] Parameter: artifactId, Value: sample
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: package, Value: itnova
+[INFO] Parameter: packageInPathFormat, Value: itnova
+[INFO] Parameter: package, Value: itnova
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: groupId, Value: itnova
+[INFO] Parameter: artifactId, Value: sample
+[INFO] Project created from Archetype in dir: C:\practice\sample
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:44 min
+[INFO] Finished at: 2021-04-02T16:13:50+09:00
+[INFO] ------------------------------------------------------------------------
+
+>폴더 구조
+└─src
+    ├─main
+    │  └─java
+    │      └─itnova
+    └─test
+        └─java
+            └─itnova
+
+     pom.xml
+
+> mvn compile
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to C:\practice\sample\target\classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.930 s
+[INFO] Finished at: 2021-04-02T16:25:09+09:00
+[INFO] ------------------------------------------------------------------------
+
+C:\practice\sample>mvn test
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running itnova.AppTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.087 s - in itnova.AppTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  25.676 s
+[INFO] Finished at: 2021-04-02T16:27:38+09:00
+[INFO] ------------------------------------------------------------------------
+
+
+C:\practice\sample>mvn package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ---------------------------< itnova:sample >----------------------------
+[INFO] Building sample 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ sample ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory C:\practice\sample\src\main\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.0:compile (default-compile) @ sample ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ sample ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory C:\practice\sample\src\test\resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.0:testCompile (default-testCompile) @ sample ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ sample ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running itnova.AppTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.118 s - in itnova.AppTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ sample ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.608 s
+[INFO] Finished at: 2021-04-02T16:31:02+09:00
+[INFO] ------------------------------------------------------------------------
+
+
+# 프로젝트 생성(옵션과 함께)
+> mvn archetype:generate -DgroupId=itnova -DartifactId=javacore -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] >>> maven-archetype-plugin:3.2.0:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO]
+[INFO] <<< maven-archetype-plugin:3.2.0:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO]
+[INFO]
+[INFO] --- maven-archetype-plugin:3.2.0:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Batch mode
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: basedir, Value: C:\practice
+[INFO] Parameter: package, Value: itnova
+[INFO] Parameter: groupId, Value: itnova
+[INFO] Parameter: artifactId, Value: javacore
+[INFO] Parameter: packageName, Value: itnova
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: C:\practice\javacore
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  13.180 s
+[INFO] Finished at: 2021-04-02T16:43:21+09:00
+[INFO] ------------------------------------------------------------------------
+
+POM file 
+ it describes the entire project information, everything from directory structure, project plugins, project dependencies, how to build this project and etc
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
