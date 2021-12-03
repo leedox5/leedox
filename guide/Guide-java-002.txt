@@ -1,0 +1,238 @@
+#소스 코드와 클래스 파일의 분리
+ 디렉토리 구조를 조직화하고 -d 옵션을 활용
+
+#src 폴더 만들고 소스 위치
+#md src
+#md classes
+#cd src
+#javac -d ../classes MyClass.java
+
+#인스턴스 변수는 가급적 private로 선언하는게 안전
+
+#접근제어 지시자를 선택하지 않는 경우 (default)
+ - 동일 패키지 내에서의 접근을 허용한다.
+
+#상속
+ 기존에 정의된 클래스에 메소드와 변수를 추가하여 새로운 클래스를 정의 함
+ extends 키워드 사용
+ super - 상위 클래스의 생성자 호출, 상위 클래스에 정의된 메소드의 호출
+
+* Man.java
+package itnova;
+
+public class Man {
+    private String name;
+    public Man(String name) {
+        this.name = name;
+    }
+    public void tellYourName() {
+        System.out.println("My name is " + name + ".");
+    }
+}
+
+
+* BusinessMan.java
+package itnova;
+
+public class BusinessMan extends Man {
+    private String company;
+    public BusinessMan(String name, String company) {
+        super(name);
+        this.company = company;
+    }
+    public void tellYourInfo() {
+        System.out.println("My company is " + company);
+        tellYourName(); //Man 클래스에서 상속했기 때문에 호출 가능
+    }
+}
+
+*ManDemo.java
+package itnova;
+
+public class ManDemo {
+    public static void main(String[] args) {
+        BusinessMan man = new BusinessMan("Mr. Kim", "ITNOVA");
+    
+        man.tellYourName(); //상위 클래스의 메소드도 호출 가능
+        man.tellYourInfo();
+    }
+}
+
+#build.bat 파일의 작성 컴파일, 실행을 자동화
+javac -d classes -sourcepath src src/itnova/ManDemo.java
+java -classpath classes itnova.ManDemo
+
+
+#VO (Value Object) class작성 데이터를 주고받는 용도로 주로 사용
+
+- itnova/Mtcd.java
+package itnova;
+
+public class Mtcd {
+	private String corpCode;
+	private String methGubn;
+	private String comeCode;
+	private String methName;
+	public String getCorpCode() {
+		return corpCode;
+	}
+	public void setCorpCode(String corpCode) {
+		this.corpCode = corpCode;
+	}
+	public String getMethGubn() {
+		return methGubn;
+	}
+	public void setMethGubn(String methGubn) {
+		this.methGubn = methGubn;
+	}
+	public String getComeCode() {
+		return comeCode;
+	}
+	public void setComeCode(String comeCode) {
+		this.comeCode = comeCode;
+	}
+	public String getMethName() {
+		return methName;
+	}
+	public void setMethName(String methName) {
+		this.methName = methName;
+	}
+}
+
+#DAO (Data Access Object) DB에 접근하여 조회, 수정, 삭제를 수행하는 class
+package itnova;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MtcdDAO {
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.3.203:1521/ITNOVA", "CAMS", "itnova01");
+		} catch (ClassNotFoundException e) {
+			System.err.println(e);
+		}
+		return conn;
+	}
+	
+	public List<Mtcd> getList() {
+		List<Mtcd> list = new ArrayList<Mtcd>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			String sql = "SELECT MTCD_CORP_CODE,MTCD_METH_GUBN,MTCD_COME_CODE,MTCD_METH_NAME FROM CITBMTCD_T";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Mtcd mtcd = new Mtcd();
+				mtcd.setCorpCode(rs.getString(1));
+				mtcd.setMethGubn(rs.getString(2));
+				mtcd.setComeCode(rs.getString(3));
+				mtcd.setMethName(rs.getString(4));
+				list.add(mtcd);
+			}
+			
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+		return list;
+	}
+	
+	public boolean insert(Mtcd mtcd ) {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+
+            String sql = "INSERT INTO CITBMTCD_T (MTCD_CORP_CODE,MTCD_METH_GUBN,MTCD_COME_CODE,MTCD_METH_NAME) VALUES ('K1', 'A', ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, mtcd.getComeCode());
+            pstmt.setString(2, mtcd.getMethName());
+            int count = pstmt.executeUpdate();
+
+            result = (count == 1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+	
+	public boolean delete(Mtcd mtcd) {
+		boolean result = false;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+             /* 
+                실습과제1 : 삭제를 수행하는 jdbc 로직 작성
+             */
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+	}
+}
+
+** jdbc와 연결 connection 객체를 생성하고 db 관련 작업을 수행
+
+#Test class
+package itnova;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MtcdTest {
+
+	public static void main(String[] args) {
+		List<Mtcd> list = new ArrayList<Mtcd>();
+		MtcdDAO dao = new MtcdDAO();
+		
+		list = dao.getList();
+		
+		if(list != null) {
+			for(Mtcd mtcd : list) {
+				System.out.println(mtcd.getCorpCode() + ":" + mtcd.getMethGubn() + ":" + mtcd.getComeCode() + ":" + mtcd.getMethName());
+			}
+		}
+	}
+}
+
+#javac -d classes -sourcepath src src/itnova/MtcdTest.java
+
+#build_mtcd.bat
+
+@echo off
+echo STEP1 Compile
+javac -d classes -sourcepath src src/itnova/MtcdTest.java
+echo STEP2 Test
+java -classpath classes;lib/* itnova.MtcdTest
+echo STEP3 배포
+copy /Y classes\itnova\Mtcd.class C:\web\WEB-INF\classes\itnova
+copy /Y classes\itnova\MtcdDAO.class C:\web\WEB-INF\classes\itnova
+copy lib\*.jar C:\web\WEB-INF\lib
+
+
+# oracle jdbc driver setting 필요
+C:\JavaWork>java -classpath classes itnova.MtcdTest
+java.lang.ClassNotFoundException: oracle.jdbc.driver.OracleDriver
+Exception in thread "main" java.lang.NullPointerException
+        at itnova.MtcdDAO.getList(MtcdDAO.java:32)
+        at itnova.MtcdTest.main(MtcdTest.java:12)
+# 
+# ojdbc.jar 를 lib로 복사
+java -classpath classes;lib/* itnova.MtcdTest
+

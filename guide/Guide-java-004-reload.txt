@@ -1,0 +1,8 @@
+Dynamic Class Reloading
+
+Every loaded class needs to be linked.
+ClassLoader.resolve()
+
+Everytime you want to relaod a class you must
+use a new instance of your ClassLoader subclass
+
