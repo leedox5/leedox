@@ -188,7 +188,7 @@ def match_save(request, match_id):
 
     scores = []
     for row in players_sorted:
-        scores.append(row.sum_ga)
+        scores.append(row.win_ma * 10 + row.sum_ga)
     
     ranks = []
     for score in scores:
