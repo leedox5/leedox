@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container my-3">
+<div class="container my-1">
+    <div class="btn-toolbar justify-content-end mb-1">
+        <div class="btn-group btn-group-sm">
+            <a href="{% url 'entec:game_create' %}" class="btn btn-outline-secondary">매치 추가</a>
+        </div>
+    </div>
     <table class="table">
         <thead class="text-center table-dark">
             <tr>
@@ -22,6 +27,5 @@
             {% endif %}
         </tbody>
     </table>
-    <a href="{% url 'entec:game_create' %}" class="btn btn-primary">매치 추가</a>
 </div>
 {% endblock %}
