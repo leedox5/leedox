@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
-    <h5 class="my-3 border-bottom pb-2">게임 등록</h5>
+    <h5 class="my-3 border-bottom pb-2">모임 정보</h5>
     <form method="post" class="post-form my-3">
         {% csrf_token %}
         <div class="mb-2">
-            <label for="subject">제목</label>
+            <label for="subject">모임명</label>
             <input type="text" class="form-control" name="subject" id="subject" value="{{ form.subject.value|default_if_none:'' }}">
         </div>
         <button type="submit" class="btn btn-primary">Save</button>

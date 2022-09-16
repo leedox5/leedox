@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container my-3">
+<div class="container my-1">
+    <div class="btn-toolbar justify-content-end mb-1">
+        <div class="btn-group btn-group-sm">
+            <a href="{% url 'entec:game_create' %}" class="btn btn-outline-secondary">모임 추가</a>
+        </div>
+    </div>
     <table class="table">
-        <thead class="text-center table-dark">
+        <thead class="text-left table-dark">
             <tr>
-                <th>제목</th> 
+                <th>모임명</th> 
                 <th>만든이</th>   
             </tr>
         </thead>
@@ -16,12 +21,11 @@
                     <a href="{% url 'entec:detail' game.id %}">{{ game.subject }}</a>
                     <span class="text-danger small ml-2">{{ game.player_set.count }}</span>
                 </td>
-                <td>{{ game.creator.username }}</td>
+                <td class="text-start">{{ game.creator.username }}</td>
             </tr>
             {% endfor %}
             {% endif %}
         </tbody>
     </table>
-    <a href="{% url 'entec:game_create' %}" class="btn btn-primary">매치 추가</a>
 </div>
 {% endblock %}
