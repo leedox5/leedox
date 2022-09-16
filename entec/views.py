@@ -10,7 +10,7 @@ def index(request):
     """
     매치 목록 출력
     """
-    game_list = Game.objects.order_by("-subject")
+    game_list = Game.objects.order_by("-create_date")
     context = {'game_list':game_list}
     return render(request, "entec/game_list.html", context)
 
